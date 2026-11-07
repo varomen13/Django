@@ -1,11 +1,18 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
 from django.contrib.auth.hashers import make_password
 
 from users.models import User
-from users.serializers import UserSerializer
+from users.serializers import RegisterSerializer, UserSerializer
+
+
+class RegisterView(CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
 
 class UserApiViewSet(ModelViewSet):

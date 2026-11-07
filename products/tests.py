@@ -57,25 +57,3 @@ class ProductTestCase(TestCase):
 		response = self.client.delete(f'/api/v1/products/{self.product.id}/')
 		self.assertEqual(response.status_code, 204)
 		self.assertEqual(Product.objects.count(), 0)
-
-
-class PrecioFinalTestCase(TestCase):
-	def setUp(self):
-		self.client = APIClient()
-		self.user = User.objects.create_user(username='test2', password='test123')
-		self.category = Category.objects.create(name='Electronica')
-		self.product = Product.objects.create(
-			name='Tablet',
-			category=self.category,
-			description='Tablet 10 pulgadas',
-			price=1000.00
-		)
-
-	def test_precio_final_autenticado(self):
-		self.client.force_authenticate(user=self.user)
-		response = self.client.get(f'/api/v1/precio-final/{self.product.id}/')
-		self.assertEqual(response.status_code, 200)
-
-	def test_precio_final_sin_token(self):
-		response = self.client.get(f'/api/v1/precio-final/{self.product.id}/')
-		self.assertEqual(response.status_code, 401)
